@@ -20,13 +20,4 @@ export class DotenvConfig {
 
     // SEED ADMIN PASSWORD
     static ADMIN_PASSWORD = process.env.ADMIN_PASSWORD!;
-
-    // BACKEND URL
-    static BACKEND_URL = process.env
-        .BACKEND_URL!.concat(':')
-        .concat(process.env.PORT!)
-        .concat('/');
-
-    // CORS LIST
-    static CORS_ORIGIN = process.env.CORS_ORIGIN?.split(',') || [];
 }
