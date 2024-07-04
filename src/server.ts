@@ -6,10 +6,8 @@
 import express from 'express'
 import http from 'http'
 import 'reflect-metadata'
-import { Apollo } from './config/apolloServer.config'
 import { AppDataSource } from './config/database.config'
 import { DotenvConfig } from './config/env.config'
-import { initializeMiddlewares } from './middleware/index'
 import Print from './utils/Print'
 
 /**
@@ -17,6 +15,7 @@ import Print from './utils/Print'
  * @description Initializes and starts the Express.js server with Apollo Server for GraphQL.
  * @returns {Promise<void>}
  */
+
 async function startServer(): Promise<void> {
     // Create an Express application
     const app = express()
@@ -31,14 +30,8 @@ async function startServer(): Promise<void> {
     }
 
     // Create an HTTP server using Express
-    const server = http.createServer(app)
-
-    // Initialize Apollo Server for GraphQL
-    const apollo = await new Apollo().server(server)
-    await apollo.start()
-
-    // Initialize middleware for Express
-    await initializeMiddlewares(app, apollo)
+    const server = http.createServer(app);
+    
 
     // Define the port to listen on
     const port = DotenvConfig.PORT
@@ -51,9 +44,9 @@ async function startServer(): Promise<void> {
 
 // Start the server by calling the startServer function
 try {
-    void startServer()
-} catch (err: any) {
+    startServer()
+} catch (error: any) {
     // Handle errors that occur while starting the server
-    Print.error(`❌ Error while starting the server - ${err}`)
-    process.exit(1)
+    console.log(error)
+    Print.error(`❌ Error while starting the server - ${error}`)
 }
