@@ -9,14 +9,14 @@ import { Auth } from '../entities/auth/auth.entity';
 import { UserLoginSchema } from '../schema/auth.schema';
 import { UserSchema } from '../schema/user.schema';
 import AuthService from '../services/auth.service';
-import { LoginInput } from '../validator/auth.validator';
+import { LoginInput, RegisterInput } from '../validator/auth.validator';
 
 @Resolver()
 export class AuthResolver {
     constructor(
         private readonly authRepo = AppDataSource.getRepository(Auth),
         private readonly authService = AuthService
-    ) {}
+    ) { }
 
     @Query(() => [String])
     async getEmails(): Promise<string[]> {
@@ -33,5 +33,11 @@ export class AuthResolver {
             accessToken: accessToken,
             user: response.user as UserSchema,
         };
+    }
+
+    @Mutation(() => String)
+    async createUser(@Arg('data') data: RegisterInput): Promise<string> {
+        const response = await this.authService.createUser(data);
+        return "User register successful";
     }
 }
