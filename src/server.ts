@@ -34,11 +34,11 @@ async function startServer(): Promise<void> {
     // Create an HTTP server using Express
     const server = http.createServer(app);
 
-    const apollo = await new Apollo().server(server)
-    await apollo.start()
+    const apollo = await new Apollo().server(server);
+    await apollo.start();
 
     // Initialize middleware for Express
-    await initializeMiddleware(app, apollo)
+    await initializeMiddleware(app, apollo);
 
     // Define the port to listen on
     const port = DotenvConfig.PORT;
@@ -50,7 +50,6 @@ async function startServer(): Promise<void> {
     app.get('/', (req, res) => {
         res.json({ message: 'Server running on port ' + port });
     });
-
 }
 
 // Start the server by calling the startServer function
@@ -61,5 +60,3 @@ try {
     console.log(error);
     Print.error(`❌ Error while starting the server - ${error}`);
 }
-
-
