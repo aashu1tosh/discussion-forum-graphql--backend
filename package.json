@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "ts-node-dev src/server.ts",
     "format": "npx prettier --write ./src",
-    "format:check": "npx prettier --check ./src"
+    "format:check": "npx prettier --check ./src",
+    "seed:admin": "ts-node-dev  ./src/seeders/admin.seed.ts seed"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
   "dependencies": {
     "@apollo/server": "^4.9.3",
     "@graphql-tools/schema": "^10.0.0",
+    "@types/morgan": "^1.9.9",
     "@types/uuid": "^10.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
@@ -37,6 +39,7 @@
     "express": "^4.19.2",
     "graphql": "^16.8.0",
     "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "2.0.0-beta.1",
