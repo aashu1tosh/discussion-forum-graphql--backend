@@ -1,5 +1,5 @@
-import { type GraphQLSchema } from 'graphql'
-import { buildSchema } from 'type-graphql'
+import { type GraphQLSchema } from 'graphql';
+import { buildSchema } from 'type-graphql';
 
 export class TypeGraphQL {
     async schema(): Promise<GraphQLSchema> {
@@ -11,7 +11,6 @@ export class TypeGraphQL {
             validate: false,
             // Emit Schema File: Set to false to disable automatic schema file generation.
             emitSchemaFile: false,
-        })
+        });
     }
 }
-
