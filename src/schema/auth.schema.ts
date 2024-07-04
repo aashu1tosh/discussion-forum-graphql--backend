@@ -9,3 +9,10 @@ export class UserLoginSchema {
     @Field(() => UserSchema)
     user!: UserSchema;
 }
+
+@ObjectType()
+export class UserRegisterSchema {
+
+    @Field(() => UserSchema)
+    user!: UserSchema;
+}
