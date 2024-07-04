@@ -3,7 +3,7 @@ import { ROLE } from '../constant/enum';
 // import { UpdatePasswordDTO } from '../dto/auth.dto';
 import { Auth } from '../entities/auth/auth.entity';
 import AppError from '../utils/appError.utils';
-import { LoginInput } from '../validator/auth.validator';
+import { LoginInput, RegisterInput } from '../validator/auth.validator';
 import BcryptService from './bcrypt.service';
 import webtokenService from './webtoken.service';
 
@@ -14,7 +14,7 @@ class AuthService {
         private readonly webTokenGenerate = webtokenService
     ) {}
 
-    async createUser(data: Auth) {
+    async createUser(data: RegisterInput) {
         try {
             if (data.role === ROLE.ADMIN)
                 throw AppError.badRequest('Admin creation not Authorized');
@@ -38,7 +38,7 @@ class AuthService {
             const hash = await this.bcryptService.hash(data?.password);
             user.password = hash;
             await this.AuthRepo.save(user);
-            return null;
+            return user;
         } catch (error: any) {
             throw AppError.badRequest(error?.message);
         }
