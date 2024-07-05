@@ -2,10 +2,16 @@
  * File: auth-inputs.ts
  * Description: This file defines input classes for authentication-related operations.
  */
-import { IsEmail, IsEnum, IsNotEmpty, IsString, Matches } from 'class-validator';
+import {
+    IsEmail,
+    IsEnum,
+    IsNotEmpty,
+    IsString,
+    Matches,
+} from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 import { ROLE } from '../constant/enum';
-import { phoneRegex } from '../constant/regex';
+import { passwordRegex, phoneRegex } from '../constant/regex';
 
 /**
  * @class LoginInput
@@ -24,10 +30,8 @@ export class LoginInput {
     password!: string;
 }
 
-
 @InputType()
 export class RegisterInput {
-
     @Field()
     @IsNotEmpty()
     @IsString()
@@ -47,8 +51,7 @@ export class RegisterInput {
     @IsNotEmpty()
     @IsString()
     @Matches(phoneRegex, {
-        message:
-            'Valid Phone Number Please',
+        message: 'Valid Phone Number Please',
     })
     phone!: string;
 
@@ -56,4 +59,20 @@ export class RegisterInput {
     @IsNotEmpty()
     @IsEnum(ROLE)
     role!: ROLE;
+}
+
+@InputType()
+export class UpdatePasswordInput {
+    @Field()
+    @IsNotEmpty()
+    @IsString()
+    oldPassword!: string;
+
+    @Field()
+    @IsNotEmpty()
+    @Matches(passwordRegex, {
+        message:
+            'New Password must contain at least one uppercase letter and one lowercase letter',
+    })
+    newPassword!: string;
 }
