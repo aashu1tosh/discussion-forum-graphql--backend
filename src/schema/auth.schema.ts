@@ -12,7 +12,6 @@ export class UserLoginSchema {
 
 @ObjectType()
 export class UserRegisterSchema {
-
     @Field(() => UserSchema)
     user!: UserSchema;
 }
