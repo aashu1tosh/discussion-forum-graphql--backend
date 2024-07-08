@@ -80,21 +80,18 @@ class AuthService {
 
             if (user) {
                 const isPasswordMatched = await this.bcryptService.compare(data?.oldPassword, user?.password);
-                console.log("🚀 ~ AuthService ~ updatePassword ~ isSamePassword:", isPasswordMatched)
                 if (!isPasswordMatched) throw AppError.badRequest("password not matched")
                 else {
                     const password = await this.bcryptService.hash(
                         data.newPassword
                     );
-                    console.log("🚀 ~ AuthService ~ updatePassword ~ password:", password)
-                    user.password = password
-                    await user.save()
+                    user.password = password;
+                    await user.save();
                 }
             }
-            return "updated"
-        } catch (error) {
+        } catch (error: any) {
             console.log(error)
-            throw AppError.badRequest("Error from try catch")
+            throw AppError.badRequest(error?.message)
         }
     }
 }
