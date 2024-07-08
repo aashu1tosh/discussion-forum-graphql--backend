@@ -3,15 +3,26 @@
  * Description: This file defines a GraphQL resolver for authentication-related operations.
  */
 
-import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
+import {
+    Arg,
+    Ctx,
+    Mutation,
+    Query,
+    Resolver,
+    UseMiddleware,
+} from 'type-graphql';
 import { AppDataSource } from '../config/database.config';
 import { Auth } from '../entities/auth/auth.entity';
 import { RequestValidator } from '../middleware/RequestValidator';
+import { authentication } from '../middleware/authentication.middleware';
 import { UserLoginSchema } from '../schema/auth.schema';
 import { UserSchema } from '../schema/user.schema';
 import AuthService from '../services/auth.service';
+import { IContext } from '../types/context.type';
 import {
+    CreateUserInput,
     LoginInput,
+    RegisterFields,
     RegisterInput,
     UpdatePasswordInput,
 } from '../validator/auth.validator';
@@ -21,7 +32,7 @@ export class AuthResolver {
     constructor(
         private readonly authRepo = AppDataSource.getRepository(Auth),
         private readonly authService = AuthService
-    ) {}
+    ) { }
 
     @Query(() => [String])
     async getEmails(): Promise<string[]> {
@@ -41,17 +52,23 @@ export class AuthResolver {
     }
 
     @Mutation(() => String)
+    @UseMiddleware(RequestValidator.validate(CreateUserInput))
     async createUser(@Arg('data') data: RegisterInput): Promise<string> {
-        const response = await this.authService.createUser(data);
+        const response = await this.authService.createUser(
+            data as RegisterFields
+        );
         return 'User register successful';
     }
 
     @Mutation(() => String)
     @UseMiddleware(RequestValidator.validate(UpdatePasswordInput))
+    @UseMiddleware(authentication())
     async updatePassword(
-        @Arg('data') data: UpdatePasswordInput
+        @Arg('data') data: UpdatePasswordInput,
+        @Ctx() context: IContext
     ): Promise<string> {
-        // const response = await this.authService.updatePassword(data);
+        const id = context.res.locals.id.id;
+        await this.authService.updatePassword(data, id);
         return 'Password Change Successfully';
     }
 }
