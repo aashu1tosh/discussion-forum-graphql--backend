@@ -17,7 +17,6 @@ export class Auth extends Base {
 
     @Column({
         unique: true,
-        nullable: true,
     })
     phone!: string;
 
