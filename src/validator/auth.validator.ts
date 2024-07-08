@@ -8,6 +8,7 @@ import {
     IsNotEmpty,
     IsString,
     Matches,
+    NotEquals,
 } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 import { ROLE } from '../constant/enum';
@@ -54,9 +55,10 @@ export class RegisterInput {
         message: 'Valid Phone Number Please',
     })
     phone!: string;
+}
 
+export class RegisterFields extends RegisterInput {
     @Field()
-    @IsNotEmpty()
     @IsEnum(ROLE)
     role!: ROLE;
 }
@@ -70,9 +72,36 @@ export class UpdatePasswordInput {
 
     @Field()
     @IsNotEmpty()
+    @NotEquals('oldPassword', { message: 'New Password must be different from old password dto' })
     @Matches(passwordRegex, {
         message:
             'New Password must contain at least one uppercase letter and one lowercase letter',
     })
     newPassword!: string;
+}
+
+@InputType()
+export class CreateUserInput {
+    @Field()
+    @IsNotEmpty()
+    @IsString()
+    name!: string;
+
+    @Field()
+    @IsNotEmpty()
+    @IsEmail()
+    email!: string;
+
+    @Field()
+    @IsNotEmpty()
+    @Matches(passwordRegex, {
+        message:
+            'New Password must contain at least one uppercase letter and one lowercase letter',
+    })
+    password!: string;
+
+    @Field()
+    @IsNotEmpty()
+    @IsString()
+    phone!: string;
 }
