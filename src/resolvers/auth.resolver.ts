@@ -32,7 +32,7 @@ export class AuthResolver {
     constructor(
         private readonly authRepo = AppDataSource.getRepository(Auth),
         private readonly authService = AuthService
-    ) { }
+    ) {}
 
     @Query(() => [String])
     async getEmails(): Promise<string[]> {

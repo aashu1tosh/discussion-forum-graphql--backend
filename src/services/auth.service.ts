@@ -15,7 +15,7 @@ class AuthService {
         private readonly AuthRepo = AppDataSource.getRepository(Auth),
         private readonly bcryptService = new BcryptService(),
         private readonly webTokenGenerate = webtokenService
-    ) { }
+    ) {}
 
     async createUser(data: RegisterFields) {
         try {
@@ -79,8 +79,12 @@ class AuthService {
             });
 
             if (user) {
-                const isPasswordMatched = await this.bcryptService.compare(data?.oldPassword, user?.password);
-                if (!isPasswordMatched) throw AppError.badRequest("password not matched")
+                const isPasswordMatched = await this.bcryptService.compare(
+                    data?.oldPassword,
+                    user?.password
+                );
+                if (!isPasswordMatched)
+                    throw AppError.badRequest('password not matched');
                 else {
                     const password = await this.bcryptService.hash(
                         data.newPassword
@@ -90,8 +94,8 @@ class AuthService {
                 }
             }
         } catch (error: any) {
-            console.log(error)
-            throw AppError.badRequest(error?.message)
+            console.log(error);
+            throw AppError.badRequest(error?.message);
         }
     }
 }

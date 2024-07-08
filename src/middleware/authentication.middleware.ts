@@ -15,26 +15,30 @@ export const authentication = (): MiddlewareFn<IContext> => {
 
         try {
             if (!token) {
-                throw AppError.unauthorized("You are not authorized for this task");
+                throw AppError.unauthorized(
+                    'You are not authorized for this task'
+                );
             }
-            Print.debug("code reached here")
+            Print.debug('code reached here');
             const mode = token[0];
             const accessToken = token[1];
             if (mode !== 'Bearer' || !accessToken)
-                throw AppError.unauthorized("You are not authorized for this task");
+                throw AppError.unauthorized(
+                    'You are not authorized for this task'
+                );
 
             const payload = webtokenService.verify(accessToken) as IJwtPayload;
 
             const _id = payload?.id as string;
             const role = await roleService.getRole(_id);
-            Print.debug("code reached here 2")
+            Print.debug('code reached here 2');
             if (payload) {
-                res.locals.id = "payload.id";
-                res.locals.role = "role";
+                res.locals.id = 'payload.id';
+                res.locals.role = 'role';
                 return next();
             }
         } catch (error) {
             throw AppError.unauthorized('Not authenticated for this task');
         }
-    }
-}
+    };
+};

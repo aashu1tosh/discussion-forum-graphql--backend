@@ -72,7 +72,9 @@ export class UpdatePasswordInput {
 
     @Field()
     @IsNotEmpty()
-    @NotEquals('oldPassword', { message: 'New Password must be different from old password dto' })
+    @NotEquals('oldPassword', {
+        message: 'New Password must be different from old password dto',
+    })
     @Matches(passwordRegex, {
         message:
             'New Password must contain at least one uppercase letter and one lowercase letter',
