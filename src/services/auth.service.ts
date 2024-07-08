@@ -4,7 +4,7 @@ import { Auth } from '../entities/auth/auth.entity';
 import AppError from '../utils/appError.utils';
 import {
     LoginInput,
-    RegisterInput,
+    RegisterFields,
     UpdatePasswordInput,
 } from '../validator/auth.validator';
 import BcryptService from './bcrypt.service';
@@ -15,9 +15,9 @@ class AuthService {
         private readonly AuthRepo = AppDataSource.getRepository(Auth),
         private readonly bcryptService = new BcryptService(),
         private readonly webTokenGenerate = webtokenService
-    ) {}
+    ) { }
 
-    async createUser(data: RegisterInput) {
+    async createUser(data: RegisterFields) {
         try {
             if (data.role === ROLE.ADMIN)
                 throw AppError.badRequest('Admin creation not Authorized');
@@ -73,35 +73,28 @@ class AuthService {
     }
 
     async updatePassword(data: UpdatePasswordInput, id: string) {
-        if (data.oldPassword === data.newPassword)
-            throw AppError.conflict(
-                'New password should differ from old password.'
-            );
+        try {
+            let user = await this.AuthRepo.findOne({
+                where: { id: id },
+            });
 
-        let user = await this.AuthRepo.findOne({
-            where: { id: id },
-        });
-        if (user) {
-            if (
-                await this.bcryptService.compare(
-                    data.oldPassword,
-                    user.password
-                )
-            ) {
-                try {
+            if (user) {
+                const isPasswordMatched = await this.bcryptService.compare(data?.oldPassword, user?.password);
+                console.log("🚀 ~ AuthService ~ updatePassword ~ isSamePassword:", isPasswordMatched)
+                if (!isPasswordMatched) throw AppError.badRequest("password not matched")
+                else {
                     const password = await this.bcryptService.hash(
                         data.newPassword
                     );
-                    await this.AuthRepo.createQueryBuilder()
-                        .update('Auth')
-                        .set({ password: password })
-                        .where('id = :id', { id })
-                        .execute();
-                } catch (error: any) {
-                    throw AppError.conflict(error?.message);
+                    console.log("🚀 ~ AuthService ~ updatePassword ~ password:", password)
+                    user.password = password
+                    await user.save()
                 }
-            } else throw AppError.badRequest('Invalid Credential');
-            return null;
+            }
+            return "updated"
+        } catch (error) {
+            console.log(error)
+            throw AppError.badRequest("Error from try catch")
         }
     }
 }
