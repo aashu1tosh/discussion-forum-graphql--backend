@@ -1,15 +1,14 @@
-import { AppDataSource } from "../config/database.config";
-import { ROLE } from "../constant/enum";
-import { Auth } from "../entities/auth/auth.entity";
-import AppError from "../utils/appError.utils";
-import BcryptService from "./bcrypt.service";
+import { AppDataSource } from '../config/database.config';
+import { ROLE } from '../constant/enum';
+import { Auth } from '../entities/auth/auth.entity';
+import AppError from '../utils/appError.utils';
+import BcryptService from './bcrypt.service';
 
 export class AdminService {
-
     constructor(
         private readonly authRepo = AppDataSource.getRepository(Auth),
         private readonly bcryptService = new BcryptService()
-    ) { }
+    ) {}
 
     async getUsers() {
         const auths = await this.authRepo.find();
@@ -17,7 +16,8 @@ export class AdminService {
     }
 
     async getById(id: string) {
-        return await this.authRepo.createQueryBuilder('auth')
+        return await this.authRepo
+            .createQueryBuilder('auth')
             .select([
                 'auth.id',
                 'auth.name',
@@ -29,9 +29,10 @@ export class AdminService {
             .getOne();
     }
 
-    async resetPassword(data: { newPassword: string; id: string; }) {
+    async resetPassword(data: { newPassword: string; id: string }) {
         const hash = await this.bcryptService.hash(data?.newPassword);
-        const response = await this.authRepo.createQueryBuilder()
+        const response = await this.authRepo
+            .createQueryBuilder()
             .update(Auth)
             .set({
                 password: hash,
@@ -45,7 +46,8 @@ export class AdminService {
         const user = await this.getById(id);
         if (user?.role === ROLE.ADMIN)
             throw AppError.forbidden('Admin cannot be deleted.');
-        await this.authRepo.createQueryBuilder()
+        await this.authRepo
+            .createQueryBuilder()
             .delete()
             .from(Auth)
             .where('id = :id', { id: id })
