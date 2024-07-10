@@ -3,14 +3,7 @@
  * Description: This file defines a GraphQL resolver for authentication-related operations.
  */
 
-import {
-    Arg,
-    Ctx,
-    Mutation,
-    Query,
-    Resolver,
-    UseMiddleware,
-} from 'type-graphql';
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql';
 import { AppDataSource } from '../config/database.config';
 import { Auth } from '../entities/auth/auth.entity';
 import { RequestValidator } from '../middleware/RequestValidator';
@@ -29,10 +22,7 @@ import {
 
 @Resolver()
 export class AuthResolver {
-    constructor(
-        private readonly authRepo = AppDataSource.getRepository(Auth),
-        private readonly authService = AuthService
-    ) {}
+    constructor(private readonly authService = AuthService) {}
 
     @Mutation(() => UserLoginSchema)
     async login(@Arg('data') data: LoginInput): Promise<UserLoginSchema> {
@@ -47,9 +37,7 @@ export class AuthResolver {
     @Mutation(() => String)
     @UseMiddleware(RequestValidator.validate(CreateUserInput))
     async createUser(@Arg('data') data: RegisterInput): Promise<string> {
-        const response = await this.authService.createUser(
-            data as RegisterFields
-        );
+        await this.authService.createUser(data as RegisterFields);
         return 'User register successful';
     }
 
