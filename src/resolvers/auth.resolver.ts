@@ -34,13 +34,6 @@ export class AuthResolver {
         private readonly authService = AuthService
     ) {}
 
-    @Query(() => [String])
-    async getEmails(): Promise<string[]> {
-        // const authRepository = getRepository(Auth);
-        const auths = await this.authRepo.find();
-        return auths.map((auth) => auth.email);
-    }
-
     @Mutation(() => UserLoginSchema)
     async login(@Arg('data') data: LoginInput): Promise<UserLoginSchema> {
         const response = await this.authService.loginUser(data);
