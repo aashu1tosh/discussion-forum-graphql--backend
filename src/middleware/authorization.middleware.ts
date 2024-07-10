@@ -9,13 +9,13 @@ export const authorization = (roles: ROLE[]): MiddlewareFn<IContext> => {
         const { res } = context;
 
         if (!res.locals.id && !res.locals.role)
-            throw AppError.unauthorized("Not authorized for this task");
+            throw AppError.unauthorized('Not authorized for this task');
         try {
             const role = res.locals.role;
             if (roles.includes(role)) return next();
-            else throw AppError.unauthorized("Not authorized for this task");
+            else throw AppError.unauthorized('Not authorized for this task');
         } catch (error) {
-            throw AppError.unauthorized("Not authorized for this task");
+            throw AppError.unauthorized('Not authorized for this task');
         }
     };
 };
