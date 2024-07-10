@@ -4,7 +4,6 @@ import { IJwtPayload } from '../interface/jwt.interface';
 import roleService from '../services/utils/role.service';
 import webtokenService from '../services/webtoken.service';
 import { IContext } from '../types/context.type';
-import Print from '../utils/Print';
 import AppError from '../utils/appError.utils';
 
 export const authentication = (): MiddlewareFn<IContext> => {
@@ -19,7 +18,6 @@ export const authentication = (): MiddlewareFn<IContext> => {
                     'You are not authorized for this task'
                 );
             }
-            Print.debug('code reached here');
             const mode = token[0];
             const accessToken = token[1];
             if (mode !== 'Bearer' || !accessToken)
@@ -29,12 +27,11 @@ export const authentication = (): MiddlewareFn<IContext> => {
 
             const payload = webtokenService.verify(accessToken) as IJwtPayload;
 
-            const _id = payload?.id as string;
-            const role = await roleService.getRole(_id);
-            Print.debug('code reached here 2');
+            const id = payload?.id as string;
+            const role = await roleService.getRole(id);
             if (payload) {
-                res.locals.id = 'payload.id';
-                res.locals.role = 'role';
+                res.locals.id = id;
+                res.locals.role = role;
                 return next();
             }
         } catch (error) {
