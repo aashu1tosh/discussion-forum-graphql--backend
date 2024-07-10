@@ -12,7 +12,9 @@ export class Auth extends Base {
     })
     email!: string;
 
-    @Column()
+    @Column({
+        select: false
+    })
     password!: string;
 
     @Column({
