@@ -50,16 +50,16 @@ class AuthService {
     async loginUser(data: LoginInput) {
         try {
             let user = await this.AuthRepo.findOne({
-                where: { email: data?.email },
+                where: [{ email: data?.email }],
+                select: ['id', 'email', 'password'],
             });
-
             if (user) {
-                if (
-                    await this.bcryptService.compare(
-                        data.password,
-                        user.password
-                    )
-                ) {
+                const passwordMatch = await this.bcryptService.compare(
+                    data?.password,
+                    user?.password
+                );
+
+                if (passwordMatch) {
                     const token = this.webTokenGenerate.sign(
                         user?.id as string
                     );
@@ -94,7 +94,6 @@ class AuthService {
                 }
             }
         } catch (error: any) {
-            console.log(error);
             throw AppError.badRequest(error?.message);
         }
     }
