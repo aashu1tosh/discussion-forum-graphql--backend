@@ -4,8 +4,6 @@
  */
 
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql';
-import { AppDataSource } from '../config/database.config';
-import { Auth } from '../entities/auth/auth.entity';
 import { RequestValidator } from '../middleware/RequestValidator';
 import { authentication } from '../middleware/authentication.middleware';
 import { UserLoginSchema } from '../schema/auth.schema';
