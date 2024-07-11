@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import Base from '../base.entity';
 import { Auth } from '../auth/auth.entity';
+import Base from '../base.entity';
 
 @Entity('Post')
 export class Post extends Base {
@@ -13,8 +13,8 @@ export class Post extends Base {
     @Column('text', { array: true, nullable: true })
     tags!: string[];
 
-    @ManyToOne(() => Auth)
-    @JoinColumn({ name: 'userId' }) // Specifies the name of the foreign key column
+    @ManyToOne(() => Auth, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'userId' })
     auth!: Auth;
 
     @Column()
