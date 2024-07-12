@@ -11,7 +11,7 @@ import { DeletePostInput } from '../validator/post.validator';
 
 @Resolver()
 export class CommentResolver {
-    constructor(private readonly commentService = new CommentService()) {}
+    constructor(private readonly commentService = new CommentService()) { }
 
     // @Query(() => String)
     // async getComment() {
@@ -27,7 +27,7 @@ export class CommentResolver {
     ) {
         const id = context?.res?.locals?.id;
         await this.commentService.postComment(data, id);
-        return 'successful';
+        return 'Comment Post Successful';
     }
 
     @Mutation(() => String)
