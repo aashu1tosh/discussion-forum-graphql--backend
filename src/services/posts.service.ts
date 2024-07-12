@@ -6,7 +6,7 @@ import { DeletePostInput, PostInput } from '../validator/post.validator';
 export class PostService {
     constructor(
         private readonly postRepo = AppDataSource.getRepository(Post)
-    ) {}
+    ) { }
 
     async postDiscussion(data: PostInput, id: string) {
         const item = this.postRepo.create(data);
@@ -19,9 +19,11 @@ export class PostService {
             const posts = await this.postRepo
                 .createQueryBuilder('post')
                 .leftJoinAndSelect('post.auth', 'auth')
+                .leftJoinAndSelect('post.comments', 'comments')
+                .leftJoinAndSelect('comments.auth', 'commentAuth')
                 .getMany();
 
-            return posts;
+            return posts
         } catch (error) {
             console.log(error);
         }
