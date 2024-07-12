@@ -10,9 +10,20 @@ export class PostService {
 
     async postDiscussion(data: PostInput, id: string) {
         const item = this.postRepo.create(data);
-        item.userId = id;
+        item.user_id = id;
         await this.postRepo.save(item);
         return;
+    }
+    async getAll() {
+        try {
+            const posts = await this.postRepo
+                .createQueryBuilder('post')
+                .leftJoinAndSelect('post.auth', 'auth')
+                .getMany();
+            return posts;
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async getById(id: string) {
@@ -30,13 +41,13 @@ export class PostService {
 
         if (!check) throw AppError.badRequest("Post doesn't Exist");
 
-        if (check?.userId != id)
+        if (check?.user_id != id)
             throw AppError.forbidden('Deleting others post is forbidden');
 
         const response = await this.postRepo
             .createQueryBuilder()
             .delete()
-            .where('id = :id and userId= :userId', { id: data.id, userId: id })
+            .where('id = :id and user_id= :userId', { id: data.id, userId: id })
             .execute();
         return;
     }
