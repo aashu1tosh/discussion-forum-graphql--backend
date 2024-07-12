@@ -13,10 +13,10 @@ export class Post extends Base {
     @Column('text', { array: true, nullable: true })
     tags!: string[];
 
-    @ManyToOne(() => Auth, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'userId' })
+    @ManyToOne(() => Auth, (auth) => auth.posts, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'user_id' })
     auth!: Auth;
 
     @Column()
-    userId!: string; // Foreign key column
+    user_id!: string; // Foreign key column
 }
