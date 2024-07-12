@@ -9,8 +9,8 @@ export class UserSchema extends BaseSchema {
     @Field()
     email!: string;
 
-    @Field()
-    role!: string;
+    // @Field()
+    // role!: string;
 
     @Field()
     phone!: string;
