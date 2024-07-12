@@ -10,8 +10,8 @@ export class PostSchema extends BaseSchema {
     @Field()
     description!: string;
 
-    @Field()
-    tags!: string;
+    @Field(() => [String])
+    tags!: string[];
 
     @Field(() => UserSchema)
     user!: UserSchema;
