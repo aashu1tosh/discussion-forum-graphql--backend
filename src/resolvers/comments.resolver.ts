@@ -44,6 +44,8 @@ export class CommentResolver {
         @Arg('data') data: DeletePostInput,
         @Ctx() context: IContext
     ): Promise<string> {
+        const id = context?.res?.locals?.id
+        await this.commentService.deleteComment(data, id)
         return 'Comment Deletion Successful';
     }
 }
