@@ -10,7 +10,7 @@ export class CommentService {
     constructor(
         private readonly commentRepo = AppDataSource.getRepository(Comment),
         private readonly postService = new PostService()
-    ) {}
+    ) { }
 
     async postComment(data: CommentInput, id: string): Promise<void> {
         try {
@@ -25,8 +25,8 @@ export class CommentService {
                     'Trying to comment in an invalid post'
                 );
             }
-        } catch (error) {
-            throw AppError.badRequest('Some went south');
+        } catch (error: any) {
+            throw AppError.badRequest(error?.message);
         }
     }
 
