@@ -1,13 +1,16 @@
 import { AppDataSource } from '../config/database.config';
 import { Comment } from '../entities/comments/comment.entity';
 import AppError from '../utils/appError.utils';
-import { CommentInput, DeleteCommentInput } from '../validator/comment.validator';
+import {
+    CommentInput,
+    DeleteCommentInput,
+} from '../validator/comment.validator';
 import { PostService } from './posts.service';
 export class CommentService {
     constructor(
         private readonly commentRepo = AppDataSource.getRepository(Comment),
         private readonly postService = new PostService()
-    ) { }
+    ) {}
 
     async postComment(data: CommentInput, id: string): Promise<void> {
         try {
@@ -18,16 +21,18 @@ export class CommentService {
                 item.user_id = id;
                 await this.commentRepo.save(item);
             } else {
-                throw AppError.badRequest("Trying to comment in an invalid post")
+                throw AppError.badRequest(
+                    'Trying to comment in an invalid post'
+                );
             }
         } catch (error) {
-            throw AppError.badRequest("Some went south")
+            throw AppError.badRequest('Some went south');
         }
     }
 
     async getById(id: string) {
         const response = await this.commentRepo.findOneBy({
-            id: id
+            id: id,
         });
         return response;
     }
@@ -39,16 +44,21 @@ export class CommentService {
             if (!check) throw AppError.badRequest("Comment doesn't Exist");
 
             if (check?.user_id != id)
-                throw AppError.forbidden('Deleting others comment is forbidden');
+                throw AppError.forbidden(
+                    'Deleting others comment is forbidden'
+                );
 
             const response = await this.commentRepo
                 .createQueryBuilder()
                 .delete()
-                .where('id = :id and user_id= :userId', { id: data.id, userId: id })
+                .where('id = :id and user_id= :userId', {
+                    id: data.id,
+                    userId: id,
+                })
                 .execute();
             return;
         } catch (error: any) {
-            throw AppError.badRequest(error?.message)
+            throw AppError.badRequest(error?.message);
         }
     }
 }

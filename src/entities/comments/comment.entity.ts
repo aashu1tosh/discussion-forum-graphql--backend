@@ -5,7 +5,6 @@ import { Post } from '../posts/post.entity';
 
 @Entity('Comment')
 export class Comment extends Base {
-
     @Column()
     comment!: string;
 
