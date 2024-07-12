@@ -11,7 +11,7 @@ import { DeletePostInput } from '../validator/post.validator';
 
 @Resolver()
 export class CommentResolver {
-    constructor(private readonly commentService = new CommentService()) { }
+    constructor(private readonly commentService = new CommentService()) {}
 
     // @Query(() => String)
     // async getComment() {
