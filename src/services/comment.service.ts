@@ -21,12 +21,34 @@ export class CommentService {
                 throw AppError.badRequest("Trying to comment in an invalid post")
             }
         } catch (error) {
-            throw AppError.internalServerError("Some went south")
+            throw AppError.badRequest("Some went south")
         }
     }
 
+    async getById(id: string) {
+        const response = await this.commentRepo.findOneBy({
+            id: id
+        });
+        return response;
+    }
 
     async deleteComment(data: DeleteCommentInput, id: string): Promise<void> {
+        try {
+            const check = await this.getById(data.id);
 
+            if (!check) throw AppError.badRequest("Comment doesn't Exist");
+
+            if (check?.user_id != id)
+                throw AppError.forbidden('Deleting others comment is forbidden');
+
+            const response = await this.commentRepo
+                .createQueryBuilder()
+                .delete()
+                .where('id = :id and user_id= :userId', { id: data.id, userId: id })
+                .execute();
+            return;
+        } catch (error: any) {
+            throw AppError.badRequest(error?.message)
+        }
     }
 }
