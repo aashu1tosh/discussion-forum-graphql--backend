@@ -1,17 +1,13 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Auth } from '../auth/auth.entity';
 import Base from '../base.entity';
+import { Post } from '../posts/post.entity';
 
-@Entity('Comments')
-export class Post extends Base {
+@Entity('Comment')
+export class Comment extends Base {
+
     @Column()
-    title!: string;
-
-    @Column()
-    description!: string;
-
-    @Column('text', { array: true, nullable: true })
-    tags!: string[];
+    comment!: string;
 
     @ManyToOne(() => Auth, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
@@ -21,9 +17,9 @@ export class Post extends Base {
     user_id!: string;
 
     @ManyToOne(() => Post, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'postId' })
+    @JoinColumn({ name: 'post_id' })
     post!: Post;
 
     @Column()
-    postId!: string;
+    post_id!: string;
 }
