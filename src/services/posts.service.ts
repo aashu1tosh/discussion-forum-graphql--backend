@@ -1,6 +1,7 @@
 import { AppDataSource } from '../config/database.config';
 import { Post } from '../entities/posts/post.entity';
 import AppError from '../utils/appError.utils';
+import { transformPost } from '../utils/transformPost';
 import { DeletePostInput, PostInput } from '../validator/post.validator';
 
 export class PostService {
@@ -20,7 +21,7 @@ export class PostService {
                 .createQueryBuilder('post')
                 .leftJoinAndSelect('post.auth', 'auth')
                 .getMany();
-            return posts;
+            return posts.map(transformPost);
         } catch (error) {
             console.log(error);
         }
