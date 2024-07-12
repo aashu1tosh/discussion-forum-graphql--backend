@@ -14,5 +14,5 @@ export class PostSchema extends BaseSchema {
     tags!: string[];
 
     @Field(() => UserSchema)
-    user!: UserSchema;
+    auth!: UserSchema;
 }
