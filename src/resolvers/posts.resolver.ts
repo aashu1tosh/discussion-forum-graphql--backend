@@ -8,6 +8,7 @@ import {
 } from 'type-graphql';
 import { RequestValidator } from '../middleware/RequestValidator';
 import { authentication } from '../middleware/authentication.middleware';
+import { PostSchema } from '../schema/post.schema';
 import { PostService } from '../services/posts.service';
 import { IContext } from '../types/context.type';
 import { DeletePostInput, PostInput } from '../validator/post.validator';
@@ -16,9 +17,10 @@ import { DeletePostInput, PostInput } from '../validator/post.validator';
 export class PostResolver {
     constructor(private readonly postService = new PostService()) {}
 
-    @Query(() => String)
+    @Query(() => [PostSchema])
     async getPosts() {
-        return 'Hello from getPosts';
+        const response = await this.postService.getAll();
+        return response;
     }
 
     @Mutation(() => String)
