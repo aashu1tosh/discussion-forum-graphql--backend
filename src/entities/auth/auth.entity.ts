@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { ROLE } from '../../constant/enum';
 import Base from '../base.entity';
+import { Post } from '../posts/post.entity';
 
 @Entity('Auth')
 export class Auth extends Base {
@@ -27,4 +28,7 @@ export class Auth extends Base {
         enum: ROLE,
     })
     role!: ROLE;
+
+    @OneToMany(() => Post, (post) => post.auth)
+    posts!: Post[];
 }
