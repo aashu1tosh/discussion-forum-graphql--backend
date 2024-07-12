@@ -1,5 +1,6 @@
 import { Field, ObjectType } from 'type-graphql';
 import BaseSchema from './base.schema';
+import { UserSchema } from './user.schema';
 
 @ObjectType()
 export class PostSchema extends BaseSchema {
@@ -12,6 +13,6 @@ export class PostSchema extends BaseSchema {
     @Field()
     tags!: string;
 
-    @Field()
-    userId!: string;
+    @Field(() => UserSchema)
+    user!: UserSchema;
 }
