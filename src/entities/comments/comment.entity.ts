@@ -23,8 +23,8 @@ export class Comment extends Base {
     postId!: string;
 
     @ManyToOne(() => Comment, (comment) => comment.children, { nullable: true })
-    parent!: Comment
+    parent!: Comment;
 
     @OneToMany(() => Comment, (comment) => comment.parent, { nullable: true })
-    children!: Comment[]
+    children!: Comment[];
 }
