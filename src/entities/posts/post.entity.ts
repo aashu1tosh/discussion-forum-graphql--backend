@@ -21,6 +21,8 @@ export class Post extends Base {
     @Column({ name: 'user_id' })
     userId!: string; // Foreign key column
 
-    @OneToMany(() => Comment, (comment) => comment.post, { onDelete: 'CASCADE' })
+    @OneToMany(() => Comment, (comment) => comment.post, {
+        onDelete: 'CASCADE',
+    })
     comments!: Comment[];
 }
