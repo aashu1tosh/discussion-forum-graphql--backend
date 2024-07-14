@@ -15,6 +15,19 @@ export class CommentInput {
 }
 
 @InputType()
+export class CommentsCommentInput {
+    @Field()
+    @IsNotEmpty()
+    @IsString()
+    commentId!: string;
+
+    @Field()
+    @IsNotEmpty()
+    @IsString()
+    comment!: string;
+}
+
+@InputType()
 export class DeleteCommentInput {
     @Field()
     @IsNotEmpty()
