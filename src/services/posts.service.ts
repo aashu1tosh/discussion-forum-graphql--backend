@@ -6,11 +6,11 @@ import { DeletePostInput, PostInput } from '../validator/post.validator';
 export class PostService {
     constructor(
         private readonly postRepo = AppDataSource.getRepository(Post)
-    ) { }
+    ) {}
 
     async postDiscussion(data: PostInput, id: string) {
         const item = this.postRepo.create(data);
-        item.user_id = id;
+        item.userId = id;
         await this.postRepo.save(item);
         return;
     }
@@ -21,11 +21,11 @@ export class PostService {
                 .leftJoinAndSelect('post.auth', 'auth')
                 .leftJoinAndSelect('post.comments', 'comments')
                 .leftJoinAndSelect('comments.auth', 'commentAuth')
+                .leftJoinAndSelect('comments.children', 'commentsComment')
                 .getMany();
-
-            return posts
+            return posts;
         } catch (error) {
-            console.log(error);
+            throw AppError.internalServerError('Something went south');
         }
     }
 
@@ -44,13 +44,13 @@ export class PostService {
 
         if (!check) throw AppError.badRequest("Post doesn't Exist");
 
-        if (check?.user_id != id)
+        if (check?.userId != id)
             throw AppError.forbidden('Deleting others post is forbidden');
 
         const response = await this.postRepo
             .createQueryBuilder()
             .delete()
-            .where('id = :id and user_id= :userId', { id: data.id, userId: id })
+            .where('id = :id and userId= :userId', { id: data.id, userId: id })
             .execute();
         return;
     }
