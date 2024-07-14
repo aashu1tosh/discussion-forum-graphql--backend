@@ -5,6 +5,7 @@ import { CommentService } from '../services/comment.service';
 import { IContext } from '../types/context.type';
 import {
     CommentInput,
+    CommentsCommentInput,
     DeleteCommentInput,
 } from '../validator/comment.validator';
 import { DeletePostInput } from '../validator/post.validator';
@@ -27,6 +28,18 @@ export class CommentResolver {
     ) {
         const id = context?.res?.locals?.id;
         await this.commentService.postComment(data, id);
+        return 'Comment Post Successful';
+    }
+
+    @Mutation(() => String)
+    @UseMiddleware(RequestValidator.validate(CommentsCommentInput))
+    @UseMiddleware(authentication())
+    async postCommentsComment(
+        @Arg('data') data: CommentsCommentInput,
+        @Ctx() context: IContext
+    ) {
+        const id = context?.res?.locals?.id;
+        await this.commentService.postCommentsComment(data, id);
         return 'Comment Post Successful';
     }
 
