@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Auth } from '../auth/auth.entity';
 import Base from '../base.entity';
 import { Post } from '../posts/post.entity';
@@ -12,13 +12,19 @@ export class Comment extends Base {
     @JoinColumn({ name: 'user_id' })
     auth!: Auth;
 
-    @Column()
-    user_id!: string;
+    @Column({ name: 'user_id' })
+    userId!: string;
 
     @ManyToOne(() => Post, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'post_id' })
     post!: Post;
 
-    @Column()
-    post_id!: string;
+    @Column({ name: 'post_id', nullable: true })
+    postId!: string;
+
+    @ManyToOne(() => Comment, (comment) => comment.children, { nullable: true })
+    parent!: Comment
+
+    @OneToMany(() => Comment, (comment) => comment.parent, { nullable: true })
+    children!: Comment[]
 }
