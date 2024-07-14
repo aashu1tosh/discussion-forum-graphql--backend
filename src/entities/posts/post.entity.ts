@@ -18,8 +18,8 @@ export class Post extends Base {
     @JoinColumn({ name: 'user_id' })
     auth!: Auth;
 
-    @Column()
-    user_id!: string; // Foreign key column
+    @Column({ name: 'user_id' })
+    userId!: string; // Foreign key column
 
     @OneToMany(() => Comment, (comment) => comment.post, { onDelete: 'CASCADE' })
     comments!: Comment[];
