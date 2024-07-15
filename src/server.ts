@@ -47,7 +47,7 @@ async function startServer(): Promise<void> {
     server.listen(port, () => {
         Print.info(`🚀 Server is listening on port ${port}`);
     });
-    app.get('/', (req, res) => {
+    app.get('/', (_, res) => {
         res.json({ message: 'Server running on port ' + port });
     });
 }
