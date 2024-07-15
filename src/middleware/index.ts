@@ -15,7 +15,6 @@ export const initializeMiddleware = async (
             context: async ({ req, res }) => ({
                 req,
                 res,
-                token: req.headers.authorization?.split(' ')[1], // Extract and provide the authorization token to the GraphQL context
             }),
         })
     );
